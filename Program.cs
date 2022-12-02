@@ -7,6 +7,22 @@ class Program
     const string NO_GUESS = "_";
     const int WRONG_GUESS_MAX = 3;
 
+    public static void printList(List<string> word)
+    {
+        foreach (string letter in word) // prints empty wordspace list (with guessed letters)
+        {
+            Console.Write(letter + " ");
+        }
+    }
+
+    public static char continueOrStop(char answer)
+    {
+        Console.WriteLine("yes - y, any key to exit \n");
+        answer = Console.ReadKey().KeyChar;
+        return answer;
+    }
+
+
     static void Main(string[] args)
     {
         Random random = new Random();
@@ -26,8 +42,9 @@ class Program
 
         while (playGame == '.')
         {
-            Console.WriteLine("yes - y, any key to exit \n");
-            playGame = Console.ReadKey().KeyChar;
+            continueOrStop(playGame);
+            //Console.WriteLine("yes - y, any key to exit \n");
+            //playGame = Console.ReadKey().KeyChar;
 
             if (playGame == 'y')
             {
@@ -41,10 +58,7 @@ class Program
                     emptyWord.Add(NO_GUESS);
                 }
 
-                foreach (string letter in emptyWord) // prints empty wordspace list; letter is the iterator variable
-                {
-                    Console.Write(letter + " ");
-                }
+                printList(emptyWord);
 
                 Console.WriteLine("\nonly " + charCount + " characters to guess!");
                 Console.WriteLine("*" + wordToGuess + "*");
@@ -75,10 +89,7 @@ class Program
                                 }
                             }
 
-                            foreach (string letter in emptyWord) // prints empty wordspace list (with guessed letters)
-                            {
-                                Console.Write(letter + " ");
-                            }
+                            printList(emptyWord);
                         }
 
                         else // wrong - letter is not in the word to guess ***
@@ -87,13 +98,17 @@ class Program
                             Console.WriteLine($"\nTry again, you have {WRONG_GUESS_MAX - wrongGuessCount} wrong tries left");
                         }
 
-                        //check if word is fully guessed
-                        if (!emptyWord.Contains(NO_GUESS))
-                        {
-                            Console.WriteLine("\nHUGE WIN! Start over?");
-                            playGame = '.';
+                    }
 
-                        }
+                    //check if word is fully guessed
+                    if (!emptyWord.Contains(NO_GUESS))
+                    {
+                        Console.WriteLine("\nHUGE WIN! Start over?");
+                        playGame = '.';
+                        break;
+
+
+                        //////// how to start over ? 
                     }
                     guess = '.';
                 }
