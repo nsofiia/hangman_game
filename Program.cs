@@ -1,13 +1,18 @@
 ﻿using System;
+using System.Diagnostics.Metrics;
 
 namespace hangman_game;
 class Program
 {
-
     static void Main(string[] args)
     {
         Random random = new Random();
-
+        int wrongGuessCount = 3;
+        char guess = '.';
+        char startOver = '.';
+        string noGuess = "_";
+        string emptyWord = "";
+        //  List<string> emptyWord = new List<string>();
         List<string> listOfWords = new List<string>();
         listOfWords.Add("cellphone");
         listOfWords.Add("notepad");
@@ -18,95 +23,77 @@ class Program
         while (true)
         {
             int randomWord = random.Next(listOfWords.Count());
-            List<string> wordToGuess = new List<string>();
-            wordToGuess.Add(listOfWords[randomWord]);
-            List<string> guessedWord = new List<string>();
-            List<string> charSpace = new List<string>();
-            int widthForCharSpace = wordToGuess.Count;
-            string guess = "";
-
-            Console.WriteLine("----" + wordToGuess.ToString());
-            Console.WriteLine("----" + guessedWord);
-            Console.WriteLine("----" + widthForCharSpace);
-            Console.WriteLine("\n\nGuess the word one letter at the time!\nWhat would be your first guess?\n");
+            string wordToGuess = listOfWords[randomWord];
+            int charCount = wordToGuess.Length;
 
 
-            while (guess == "")
+            Console.WriteLine("\nGuess the word one letter at the time!\n");
+
+            foreach (char letter in wordToGuess)  // prints empty wordspace
             {
-                guess = Console.ReadLine().ToLower();
+                emptyWord += noGuess;
+            }
+            Console.Write(emptyWord);
 
+            Console.WriteLine("\n" + charCount + " characters");
+            Console.WriteLine("----" + wordToGuess);
 
-                for (int index = 0; index < widthForCharSpace - 1; index++)
+            while (guess == '.')
+            {
+                while (wrongGuessCount > 0)
                 {
-                    if (wordToGuess.ElementAt(index) == guess)
+                    Console.Clear();
+                    Console.WriteLine("\nEnter your guess");
+                    guess = Console.ReadKey().KeyChar;
+
+                    if (wordToGuess.Contains(guess))
                     {
-                        Console.WriteLine("You guessed!");
-                        break;
-                    }
-                    else
-                    {
-                        if (index == widthForCharSpace - 1)
+                        Console.WriteLine("\nYou guessed!");
+                        for (int i = guess; i < charCount; i++)
                         {
-                            Console.WriteLine("nope");
+                            if (guess.Equals(wordToGuess[i]))
+                            {
+                                emptyWord[i].ToString().ReplaceLineEndings(wordToGuess[i].ToString());
+                            }
+                        }
+                        foreach (char letter in emptyWord)  // prints empty with guesses
+                        {
+                            Console.Write(letter);
+                        }
+                        if (emptyWord.ToString() == wordToGuess)
+                        {
+                            Console.WriteLine("You won! Start over? " +
+                                "\nEnter y - to start over, enter any other key to Exit\n");
+                            startOver = Console.ReadKey().KeyChar;
+                            if (startOver == 'y')
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                Environment.Exit(1);
+                            }
                         }
                     }
-
-
-                }
-
-
-                foreach (string letter in wordToGuess)
-                {
-                    if (letter == guess)
-                    {
-                        Console.Write(guess);
-                    }
                     else
                     {
-                        Console.Write(charSpace);
+                        wrongGuessCount--;
+                        if (wrongGuessCount != 0)
+                        {
+                            Console.WriteLine($"\nTry again, you have {wrongGuessCount} wrong tries left");
+                        }
                     }
+                    guess = '.';
                 }
-                guess = "";
+                Console.WriteLine("\nGuessed wrong too many times. Press any key for exit");
+                Console.ReadKey();
+                Environment.Exit(1);
             }
-
-            foreach (string letter in wordToGuess)
-            {
-                Console.Write(charSpace);
-            }
-
 
         }
-
-
-        //for (char letter in wordToGuess)
-        //{
-        //    if (letter == guess)
-        //    {
-        //        Console.Write(guess);
-        //    }
-        //    else
-        //    {
-        //        Console.Write(charSpace);
-        //    }
-        //}
-
-
-        //static string HaveLetter(string guess)
-        //{
-        //    if 
-        //}
-
-        //for (char letter == answer in wordToGuess)
-        //{
-        //    Console.Write(letter);
-        //}
-
-
-
-
-
         Console.ReadKey();
-
     }
+
 }
+
 
