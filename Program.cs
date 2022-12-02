@@ -42,9 +42,9 @@ class Program
 
         while (playGame == '.')
         {
-            continueOrStop(playGame);
-            //Console.WriteLine("yes - y, any key to exit \n");
-            //playGame = Console.ReadKey().KeyChar;
+            //  continueOrStop(playGame);
+            Console.WriteLine("yes - y, any key to exit \n");
+            playGame = Console.ReadKey().KeyChar;
 
             if (playGame == 'y')
             {
@@ -73,7 +73,7 @@ class Program
                             Console.WriteLine("\nEnter a letter:");
                             guess = Console.ReadKey().KeyChar;
                         }
-
+                        Console.Clear();
                         if (wordToGuess.Contains(guess))    // check if guess letter is in the word to guess
                         {
                             Console.WriteLine("\nYou guessed!\n"); // correct ***
@@ -103,11 +103,10 @@ class Program
                     //check if word is fully guessed
                     if (!emptyWord.Contains(NO_GUESS))
                     {
-                        Console.WriteLine("\nHUGE WIN! Start over?");
+                        Console.WriteLine("\n\nHUGE WIN! Start over?");
                         playGame = '.';
-                        break;
-
-
+                        Console.ReadKey();
+                        Environment.Exit(1);
                         //////// how to start over ? 
                     }
                     guess = '.';
