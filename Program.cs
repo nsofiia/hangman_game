@@ -1,34 +1,19 @@
 ﻿using System;
-using System.Diagnostics.Metrics;
 
 namespace hangman_game;
+
 class Program
 {
     const string NO_GUESS = "_";
     const int WRONG_GUESS_MAX = 3;
 
-    public static void printList(List<string> word)
-    {
-        foreach (string letter in word) // prints empty wordspace list (with guessed letters)
-        {
-            Console.Write(letter + " ");
-        }
-    }
-
-    public static char continueOrStop(char answer)
-    {
-        Console.WriteLine("yes - y, any key to exit \n");
-        answer = Console.ReadKey().KeyChar;
-        return answer;
-    }
-
-
     static void Main(string[] args)
     {
         Random random = new Random();
-        char guess = '.';
+        char guess = '0';
         int wrongGuessCount = 0;
-        char playGame = '.';
+        char playGame = '0';
+
 
         List<string> emptyWord = new List<string>();
         List<string> listOfWords = new List<string>();
@@ -38,15 +23,15 @@ class Program
         listOfWords.Add("beaver");
         listOfWords.Add("starfish");
 
-        Console.WriteLine("Would you like to guess the word one letter at the time?\n");
+        Console.WriteLine("Guess the word one letter at the time! Strat?");
 
-        while (playGame == '.')
+        //keep asking for answer if answer is not a walid letter
+        while (!Char.IsLetter(playGame))
         {
-            //  continueOrStop(playGame);
-            Console.WriteLine("yes - y, any key to exit \n");
+            Console.WriteLine("\ny - start playng; any other key - to exit this game\n");
             playGame = Console.ReadKey().KeyChar;
 
-            if (playGame == 'y')
+            if (playGame == 'y' || playGame == 'Y')
             {
                 Console.Clear();
                 int randomWord = random.Next(listOfWords.Count());
@@ -58,66 +43,110 @@ class Program
                     emptyWord.Add(NO_GUESS);
                 }
 
+                Console.WriteLine("\nGot lucky, only " + charCount + " characters!");
+
                 printList(emptyWord);
 
-                Console.WriteLine("\nonly " + charCount + " characters to guess!");
-                Console.WriteLine("*" + wordToGuess + "*");
+                //Console.WriteLine("\nhint *" + wordToGuess + "*"); //print the random word selected 
 
-                while (WRONG_GUESS_MAX != wrongGuessCount)   // counting wrong guesses
+                while (!Char.IsLetter(guess))  //checking input
                 {
-                    while (guess == '.')
+                    Console.WriteLine("Enter a letter:\n");
+                    guess = Console.ReadKey().KeyChar;
+
+                    //put wron guess counter and game exit here
+                    if (!wordToGuess.Contains(guess))
                     {
+                        wrongGuessCount++;
+                        int lives = WRONG_GUESS_MAX - wrongGuessCount;
+                        Console.WriteLine($"\n\nNope, {lives} wrong guesses left.");
 
-                        while (!Char.IsLetter(guess))  //checking input
+                        if (wrongGuessCount == WRONG_GUESS_MAX)
                         {
-                            Console.WriteLine("\nEnter a letter:");
-                            guess = Console.ReadKey().KeyChar;
+                            Console.WriteLine("\nOut of tries, maybe next time. Press any key to exit.");
+                            Console.ReadKey();
+                            Environment.Exit(1);
                         }
-                        Console.Clear();
-                        if (wordToGuess.Contains(guess))    // check if guess letter is in the word to guess
-                        {
-                            Console.WriteLine("\nYou guessed!\n"); // correct ***
-
-                            //iterate through word, looking for the entered letter; index < charCount - because execution should iterate untill, and break when condition is false -> inex == charCount 
-                            for (int index = 0; index < charCount; index++)
-                            {
-
-                                if (wordToGuess[index] == guess)    // adding guessed letters into the correct spaces in the empty word
-                                {
-                                    emptyWord.RemoveAt(index);
-                                    emptyWord.Insert(index, guess.ToString());
-                                }
-                            }
-
-                            printList(emptyWord);
-                        }
-
-                        else // wrong - letter is not in the word to guess ***
-                        {
-                            wrongGuessCount++;  // decreasign the count of wrong guesses, since max wrong guesses is 3
-                            Console.WriteLine($"\nTry again, you have {WRONG_GUESS_MAX - wrongGuessCount} wrong tries left");
-                        }
-
+                        Console.WriteLine("\nYou are close! Try again. ");
                     }
 
-                    //check if word is fully guessed
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("\nYou guessed!\n"); // correct ***
+
+                        //iterate through word, looking for the entered letter; index < charCount - because execution should iterate untill, and break when condition is false -> inex == charCount 
+                        for (int index = 0; index < charCount; index++)
+                        {
+
+                            if (wordToGuess[index] == guess) // adding guessed letters into the correct spaces in the empty word
+                            {
+                                emptyWord.RemoveAt(index);
+                                emptyWord.Insert(index, guess.ToString());
+                            }
+                        }
+
+                        printList(emptyWord);
+                    }
+
+                    //check if all letters in the word are guessed
                     if (!emptyWord.Contains(NO_GUESS))
                     {
                         Console.WriteLine("\n\nHUGE WIN! Start over?");
-                        playGame = '.';
-                        Console.ReadKey();
-                        Environment.Exit(1);
-                        //////// how to start over ? 
+                        playGame = '0';
+                        guess = '.';
+                        emptyWord.Clear();
+                        break;
                     }
                     guess = '.';
                 }
-                Console.WriteLine("\nGuessed wrong too many times. Press any key for exit");
-                Console.ReadKey();
+            }
+
+            else
+            {
                 Environment.Exit(1);
             }
         }
-
     }
 
+    public static void printList(List<string> word)
+    {
+        Console.WriteLine("\n\n");
+        foreach (string letter in word) // prints empty wordspace list (with guessed letters)
+        {
+            Console.Write(letter + " ");
+        }
+        Console.WriteLine("\n\n");
+    }
 
+    public static char continueOrStop(char answer) //doesn't work as expected
+    {
+        Console.WriteLine("yes - y, any key to exit \n");
+        answer = Console.ReadKey().KeyChar;
+        return answer;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
