@@ -6,13 +6,14 @@ class Program
 {
     const string NO_GUESS = "_";
     const int WRONG_GUESS_MAX = 3;
+    const int DEFAULT = 0;
 
     static void Main(string[] args)
     {
         Random random = new Random();
-        char guess = '0';
-        int wrongGuessCount = 0;
-        char playGame = '0';
+        char guess = (char)DEFAULT;
+        int wrongGuessCount = DEFAULT;
+        char playGame = (char)DEFAULT;
 
 
         List<string> emptyWord = new List<string>();
@@ -23,7 +24,7 @@ class Program
         listOfWords.Add("beaver");
         listOfWords.Add("starfish");
 
-        Console.WriteLine("Guess the word one letter at the time! Strat?");
+        Console.WriteLine("Wanna guess a word one letter at the time?");
 
         //keep asking for answer if answer is not a walid letter
         while (!Char.IsLetter(playGame))
@@ -76,7 +77,7 @@ class Program
                         Console.WriteLine("\nYou guessed!\n"); // correct ***
 
                         //iterate through word, looking for the entered letter; index < charCount - because execution should iterate untill, and break when condition is false -> inex == charCount 
-                        for (int index = 0; index < charCount; index++)
+                        for (int index = DEFAULT; index < charCount; index++)
                         {
 
                             if (wordToGuess[index] == guess) // adding guessed letters into the correct spaces in the empty word
@@ -93,7 +94,7 @@ class Program
                     if (!emptyWord.Contains(NO_GUESS))
                     {
                         Console.WriteLine("\n\nHUGE WIN! Start over?");
-                        playGame = '0';
+                        playGame = (char)DEFAULT;
                         guess = '.';
                         emptyWord.Clear();
                         break;
