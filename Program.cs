@@ -27,12 +27,12 @@ class Program
         Console.WriteLine("Wanna guess a word one letter at the time?");
 
         //keep asking for answer if answer is not a walid letter
-        while (!Char.IsLetter(playGame))
+        do
         {
-            Console.WriteLine("\ny - start playng; any other key - to exit this game\n");
-            playGame = Console.ReadKey().KeyChar;
+            Console.WriteLine("\npress y - to START \nany other key - to EXIT\n");
+            playGame = Char.ToUpper(Console.ReadKey().KeyChar);
 
-            if (playGame == 'y' || playGame == 'Y')
+            if (playGame == 'Y')
             {
                 Console.Clear();
                 int randomWord = random.Next(listOfWords.Count());
@@ -44,18 +44,28 @@ class Program
                     emptyWord.Add(NO_GUESS);
                 }
 
-                Console.WriteLine("\nGot lucky, only " + charCount + " characters!");
+                Console.WriteLine("\nOnly " + charCount + " characters!");
 
                 printList(emptyWord);
 
                 //Console.WriteLine("\nhint *" + wordToGuess + "*"); //print the random word selected 
-
-                while (!Char.IsLetter(guess))  //checking input
+                while (true)
                 {
                     Console.WriteLine("Enter a letter:\n");
-                    guess = Console.ReadKey().KeyChar;
+                    guess = Char.ToLower(Console.ReadKey().KeyChar);
 
-                    //put wron guess counter and game exit here
+                    if (Char.IsPunctuation(guess) || Char.IsWhiteSpace(guess))
+                    {
+                        Console.WriteLine("\nnot a letter");
+                        continue;
+                    }
+                    if (Char.IsDigit(guess) || Char.IsSymbol(guess))
+                    {
+                        Console.WriteLine("\nnot a letter");
+                        continue;
+                    }
+
+                    //put wrong guess counter and game exit here
                     if (!wordToGuess.Contains(guess))
                     {
                         wrongGuessCount++;
@@ -66,9 +76,9 @@ class Program
                         {
                             Console.WriteLine("\nOut of tries, maybe next time. Press any key to exit.");
                             Console.ReadKey();
-                            Environment.Exit(1);
+                            return;
                         }
-                        Console.WriteLine("\nYou are close! Try again. ");
+                        Console.WriteLine("\nTry again. ");
                     }
 
                     else
@@ -93,21 +103,21 @@ class Program
                     //check if all letters in the word are guessed
                     if (!emptyWord.Contains(NO_GUESS))
                     {
-                        Console.WriteLine("\n\nHUGE WIN! Start over?");
+                        Console.WriteLine("\nHUGE WIN! Start over?\n");
                         playGame = (char)DEFAULT;
-                        guess = '.';
+                        guess = (char)DEFAULT;
                         emptyWord.Clear();
                         break;
                     }
-                    guess = '.';
+                    guess = (char)DEFAULT;
                 }
             }
 
             else
             {
-                Environment.Exit(1);
+                return;
             }
-        }
+        } while (playGame == guess);
     }
 
     public static void printList(List<string> word)
@@ -120,12 +130,12 @@ class Program
         Console.WriteLine("\n\n");
     }
 
-    public static char continueOrStop(char answer) //doesn't work as expected
-    {
-        Console.WriteLine("yes - y, any key to exit \n");
-        answer = Console.ReadKey().KeyChar;
-        return answer;
-    }
+    //public static char continueOrStop(char answer) //doesn't work as expected
+    //{
+    //    Console.WriteLine("yes - y, any key to exit \n");
+    //    answer = Char.ToLower(Console.ReadKey().KeyChar);
+    //    return answer;
+    //}
 }
 
 
