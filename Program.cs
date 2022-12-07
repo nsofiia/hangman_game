@@ -129,13 +129,6 @@ class Program
         }
         Console.WriteLine("\n\n");
     }
-
-    //public static char continueOrStop(char answer) //doesn't work as expected
-    //{
-    //    Console.WriteLine("yes - y, any key to exit \n");
-    //    answer = Char.ToLower(Console.ReadKey().KeyChar);
-    //    return answer;
-    //}
 }
 
 
