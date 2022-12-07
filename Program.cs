@@ -6,14 +6,15 @@ class Program
 {
     const string NO_GUESS = "_";
     const int WRONG_GUESS_MAX = 3;
-    const int DEFAULT = 0;
+    const int DEFAULT_INT = 0;
+    const char DEFAULT_CHAR = '0';
 
     static void Main(string[] args)
     {
         Random random = new Random();
-        char guess = (char)DEFAULT;
-        int wrongGuessCount = DEFAULT;
-        char playGame = (char)DEFAULT;
+        char guess = DEFAULT_CHAR;
+        int wrongGuessCount = DEFAULT_INT;
+        char playGame = DEFAULT_CHAR;
 
 
         List<string> emptyWord = new List<string>();
@@ -35,7 +36,7 @@ class Program
             if (playGame == 'Y')
             {
                 Console.Clear();
-                int randomWord = random.Next(listOfWords.Count);
+                int randomWord = random.Next(listOfWords.Count());
                 string wordToGuess = listOfWords[randomWord];
                 int charCount = wordToGuess.Length;
 
@@ -54,12 +55,7 @@ class Program
                     Console.WriteLine("Enter a letter:\n");
                     guess = Char.ToLower(Console.ReadKey().KeyChar);
 
-                    if (Char.IsPunctuation(guess) || Char.IsWhiteSpace(guess))
-                    {
-                        Console.WriteLine("\nnot a letter");
-                        continue;
-                    }
-                    if (Char.IsDigit(guess) || Char.IsSymbol(guess))
+                    if (!Char.IsLetter(guess))
                     {
                         Console.WriteLine("\nnot a letter");
                         continue;
@@ -87,7 +83,7 @@ class Program
                         Console.WriteLine("\nYou guessed!\n"); // correct ***
 
                         //iterate through word, looking for the entered letter; index < charCount - because execution should iterate untill, and break when condition is false -> inex == charCount 
-                        for (int index = DEFAULT; index < charCount; index++)
+                        for (int index = DEFAULT_INT; index < charCount; index++)
                         {
 
                             if (wordToGuess[index] == guess) // adding guessed letters into the correct spaces in the empty word
@@ -104,12 +100,12 @@ class Program
                     if (!emptyWord.Contains(NO_GUESS))
                     {
                         Console.WriteLine("\nHUGE WIN! Start over?\n");
-                        playGame = (char)DEFAULT;
-                        guess = (char)DEFAULT;
+                        playGame = DEFAULT_CHAR;
+                        guess = DEFAULT_CHAR;
                         emptyWord.Clear();
                         break;
                     }
-                    guess = (char)DEFAULT;
+                    guess = DEFAULT_CHAR;
                 }
             }
 
@@ -129,6 +125,13 @@ class Program
         }
         Console.WriteLine("\n\n");
     }
+
+    //public static char continueOrStop(char answer) //doesn't work as expected
+    //{
+    //    Console.WriteLine("yes - y, any key to exit \n");
+    //    answer = Char.ToLower(Console.ReadKey().KeyChar);
+    //    return answer;
+    //}
 }
 
 
