@@ -35,7 +35,7 @@ class Program
             if (playGame == 'Y')
             {
                 Console.Clear();
-                int randomWord = random.Next(listOfWords.Count());
+                int randomWord = random.Next(listOfWords.Count);
                 string wordToGuess = listOfWords[randomWord];
                 int charCount = wordToGuess.Length;
 
